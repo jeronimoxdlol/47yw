@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Perfil 3D Interactivo - 47yw</title>
+    <title>47yw</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://i.pinimg.com/736x/5d/89/6e/5d896e0210e0704701f73f9eedfa581e.jpg" type="image/jpeg">
     <style>
         * {
             margin: 0;
@@ -43,7 +44,78 @@
             opacity: 1;
         }
 
-        /* Tooltip para los iconos */
+        #initial-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            z-index: 10;
+        }
+
+        #click-text {
+            font-size: 48px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        #main-content {
+            display: none;
+            position: relative;
+            height: 100vh;
+            perspective: 1000px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #content-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            will-change: transform;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-container {
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-header {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .profile-name {
+            font-size: 28px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .profile-icons {
+            display: flex;
+            gap: 10px;
+        }
+
         .profile-icon {
             position: relative;
             width: 24px;
@@ -80,75 +152,6 @@
             opacity: 1;
         }
 
-        #initial-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #000;
-            z-index: 10;
-        }
-
-        #click-text {
-            font-size: 48px;
-            color: #fff;
-            cursor: pointer;
-            font-weight: 300;
-            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        #main-content {
-            display: none;
-            position: relative;
-            height: 100vh;
-            perspective: 1000px;
-            overflow: hidden;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        #content-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            will-change: transform;
-        }
-
-        .profile-container {
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            width: 85%;
-            max-width: 400px;
-        }
-
-        .profile-header {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin-bottom: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .profile-name {
-            font-size: 28px;
-            font-weight: 500;
-            letter-spacing: 1px;
-        }
-
-        .profile-icons {
-            display: flex;
-            gap: 10px;
-        }
-
         .user-card {
             position: relative;
             background-color: rgba(255, 255, 255, 0.05);
@@ -160,6 +163,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            width: 100%;
         }
 
         .user-info {
@@ -202,7 +206,6 @@
 
         /* Barra de música */
         .music-player {
-            position: relative;
             background-color: rgba(255, 255, 255, 0.08);
             border-radius: 8px;
             padding: 10px 15px;
@@ -211,7 +214,6 @@
             gap: 12px;
             width: 100%;
             max-width: 400px;
-            margin: 0 auto;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -503,7 +505,9 @@
             clickText.style.transform = 'translateY(-20px)';
             setTimeout(() => {
                 initialScreen.style.display = 'none';
-                mainContent.style.display = 'block';
+                mainContent.style.display = 'flex';
+                mainContent.style.justifyContent = 'center';
+                mainContent.style.alignItems = 'center';
                 setTimeout(() => {
                     mainContent.style.opacity = '1';
                 }, 50);
@@ -555,9 +559,9 @@
         // Actualizar progreso de la canción
         function updateProgress() {
             audioPlayer.addEventListener('timeupdate', () => {
-                if (isPlaying) {
+                if (!isNaN(audioPlayer.duration)) {
                     const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-                    progressFill.style.width = `${isNaN(progress) ? 0 : progress}%`;
+                    progressFill.style.width = `${progress}%`;
 
                     const currentMinutes = Math.floor(audioPlayer.currentTime / 60);
                     const currentSeconds = Math.floor(audioPlayer.currentTime % 60).toString().padStart(2, '0');
